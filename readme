@@ -1,0 +1,12 @@
+API:
+http://localhost:5000/api_v1/product/createProduct
+
+
+requestBody:
+
+{
+	"productName": "sugar",
+    "productCategory": "food",
+    "productDescription": "good project",
+    "productPrice": 2
+}
