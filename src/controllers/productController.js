@@ -1,20 +1,40 @@
 import Product from "../model/productModel.js";
-
+import cloudinary from "../config/cloudinaryConfig.js";
+import fs from "fs"; 
 export const createProduct = async (req, res) => {
   try {
     const {
       productName,
       productPrice,
       productDescription,
-      productCategory
+      productCategory,
+      productImage
     } = req.body;
 
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    // Upload file from local path to Cloudinary
+    const uploadedImage  = await cloudinary.uploader.upload(req.file.path, {
+      folder: "uploads",
+    });
+
+    // Delete file from local server after upload
+    
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+
+console.log("Uploaded Image:", uploadedImage);
     const product = new Product({
       productName,
       productPrice,
       productDescription,
-      productCategory
+      productCategory,
+      productImage:uploadedImage.secure_url
     });
+   
 
     const savedProduct = await product.save();
 
@@ -27,6 +47,7 @@ export const createProduct = async (req, res) => {
     res.status(500).json({
       message: "Error creating product",
       error: error.message
+
     });
   }
 };
