@@ -1,5 +1,6 @@
 import Product from "../model/productModel.js";
 import cloudinary from "../config/cloudinaryConfig.js";
+import upload from "../middlewares/fileUpload.js";
 import fs from "fs"; 
 export const createProduct = async (req, res) => {
   try {
@@ -21,11 +22,7 @@ export const createProduct = async (req, res) => {
     });
 
     // Delete file from local server after upload
-    
-    if (fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
+       upload.deleteFile(req.file.path);
 console.log("Uploaded Image:", uploadedImage);
     const product = new Product({
       productName,
