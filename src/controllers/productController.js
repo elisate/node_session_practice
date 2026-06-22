@@ -23,7 +23,7 @@ export const createProduct = async (req, res) => {
 
     // Delete file from local server after upload
        upload.deleteFile(req.file.path);
-console.log("Uploaded Image:", uploadedImage);
+
     const product = new Product({
       productName,
       productPrice,
@@ -48,3 +48,20 @@ console.log("Uploaded Image:", uploadedImage);
     });
   }
 };
+
+
+export const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.status(200).json({
+      message: "Products retrieved successfully",
+      data: products
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error retrieving products",
+      error: error.message
+    });
+  }
+};  
+    
